@@ -6,18 +6,17 @@ const apiGet = async (endpoint="") =>{
         const response =  await axios.get(API_URL_BACK+endpoint)
         return response.data
     }catch(error){
-        console.error(error)
+        console.error("API error:",error)
     }
 }
 
-const apiGetBanks = async (aimCountry) =>{
+const apiGetJson = async (endpoint="", number) => {
     try{
-        console.log(aimCountry)
-        const response = await axios.get(API_URL_BACK+"getBanks/"+aimCountry)
-        return response.data
+        const response = await axios.get(API_URL_BACK+endpoint,number)
+        return response
     }catch(error){
-        console.error(error)
+        console.error("API error:",error)
     }
 }
 
-export { apiGet,apiGetBanks }
+export { apiGet,apiGetJson }

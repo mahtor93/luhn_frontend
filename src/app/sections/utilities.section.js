@@ -1,39 +1,73 @@
 'use client'
 import DropdownMenu from "@/components/dropdownMenu";
-import { apiGet,apiGetBanks } from "@/functions/api";
+import { apiGet,apiGetJson } from "@/functions/api";
 import { useEffect, useState } from "react";
 
 export default function Utilities() {
-  const [countries,setCountries] = useState([])
-  const [selectedCountry,setSelectedCountry] = useState(null)
-  const [banks,setBanks] = useState([])
+  const [cardNumber, setCardNumber] = useState("")
+  const [countries, setCountries] = useState([])
+  const [selectedCountry, setSelectedCountry] = useState(null)
+  const [banks, setBanks] = useState([])
   const [selectedBank, setSelectedBank] = useState(null)
+  const [networks, setNetworks] = useState([])
+  const [selectedNetwork, setSelectedNetwork] = useState([])
 
-  const handleCountryChange = (country) =>{
+  const handleCountryChange = (country) => {
     setSelectedCountry(country)
-    apiGet(`getbanks/${country}`)
-    .then(data => {
-      data?setBanks(data):setBanks(["no banks"])
-    })
-    .catch(error =>{
-      console.error("Webpage Error:", error)
-    })
-    .finally(()=> console.log(banks))
-  }
 
-  const handleBankChange = (bank) => {
-    setSelectedBank(bank)
+    apiGet(`getbanks/${country}`)
+      .then(data => {
+        data ? setBanks(data) : setBanks(["no banks"])
+      })
+      .catch(error => {
+        console.error("Webpage Error:", error)
+      })
+      .finally(() => console.log(banks))
   }
 
   
-  const fetchData = () =>{
-    apiGet("getcountries")
+  const handleBankChange = (bank) => {
+    setSelectedBank(bank)
+    console.log(bank)
+    const bank_query = bank.replace(/ /g, "_")
+    console.log(bank_query)
+    apiGet(`getnetworks/${bank_query}`)
+      .then(data => {
+        data ? setNetworks(data) : setNetworks(["No networks"])
+      })
+      .catch(error => {
+        console.error("Webpage error", error)
+      })
+      .finally(() => console.log(networks))
+  }
+
+  const handleNetworkChange = (network) => {
+    setSelectedNetwork(network)
+  }
+
+  const handleCardNumberChange = (event) => {
+    setCardNumber(event.target.value)
+  }
+
+  const handleCardNumberSearch = () =>{
+    apiGet(`card/${cardNumber}`)
     .then(data => {
-      data?setCountries(data):setCountries(["no countries"])
+      data?console.log(data):console.log("noData")
     })
     .catch(error => {
       console.error("Webpage Error:", error)
     })
+    .finally(()=> console.log(data))
+  }
+
+  const fetchData = () => {
+    apiGet("getcountries")
+      .then(data => {
+        data ? setCountries(data) : setCountries(["no countries"])
+      })
+      .catch(error => {
+        console.error("Webpage Error:", error)
+      })
 
   }
 
@@ -64,8 +98,8 @@ export default function Utilities() {
           </div>
           <form className="max-w-2xl mx-auto sm:px-6 pb-[100px] flex sm:flex-row flex-col justify-center items-center p-5">
             <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
-            <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a card number" required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg">Get Data</button>
+            <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a card number"onChange={handleCardNumberChange} required />
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={handleCardNumberSearch}>Get Data</button>
 
           </form>
           <div className="flex items-center pb-5 justify-center">
@@ -96,14 +130,17 @@ export default function Utilities() {
             <p className="text-lg  md:text-xl text-justify">
               This tool will generate a required quantity of credit card numbers for a selected combination
             </p>
-            <p>Selected Country: {selectedCountry} </p>
-            <p>Selected Bank: {selectedBank} </p>
-            <div className="space-x-5 justify-center items-center flex">
-              <DropdownMenu className="w-60" name="Country" content={countries} onSelect={handleCountryChange}/>
-              <DropdownMenu className="w-60" name="Bank" content={banks} onSelect={handleBankChange}/>
-              <DropdownMenu className="w-60" name="Red"/>
-            </div>
 
+            <div className="space-x-5 justify-center py-5 items-center flex">
+              <DropdownMenu className="w-60" name="Country" content={countries} onSelect={handleCountryChange} />
+              <DropdownMenu className="w-60" name="Bank" content={banks} onSelect={handleBankChange} />
+              <DropdownMenu className="w-60" name="Red" content={networks} onSelect={handleNetworkChange} />
+            </div>
+            <div className="space-y-5">
+              <p>Selected Country: {selectedCountry} </p>
+              <p>Selected Bank: {selectedBank} </p>
+              <p>Selected Network: {selectedNetwork} </p>
+            </div>
           </div>
           <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[100px]  flex sm:flex-row fle justify-center items-center p-5">
             <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg">Generate</button>
