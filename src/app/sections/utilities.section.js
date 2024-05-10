@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 
 export default function Utilities() {
   const [cardNumber, setCardNumber] = useState("")
-  const [countries, setCountries] = useState([])
+  const [countries, setCountries] = useState(["No Countries"])
   const [selectedCountry, setSelectedCountry] = useState(null)
-  const [banks, setBanks] = useState([])
+  const [banks, setBanks] = useState(["No Banks"])
   const [selectedBank, setSelectedBank] = useState(null)
-  const [networks, setNetworks] = useState([])
+  const [networks, setNetworks] = useState(["No Networks"])
   const [selectedNetwork, setSelectedNetwork] = useState([])
   const [visibleCard,setVisibleCard] = useState(false)
   const [cardData, setCardData] = useState([])
@@ -183,10 +183,10 @@ export default function Utilities() {
               This tool will generate a required quantity of credit card numbers for a selected combination
             </p>
 
-            <div className="space-x-5 justify-center py-5 items-center flex">
-              <DropdownMenu className="w-60" name="Country" content={countries} onSelect={handleCountryChange} />
-              <DropdownMenu className="w-60" name="Bank" content={banks} onSelect={handleBankChange} />
-              <DropdownMenu className="w-60" name="Red" content={networks} onSelect={handleNetworkChange} />
+            <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
+              <DropdownMenu className="sm:w-60" name="Country" content={countries} onSelect={handleCountryChange} />
+              <DropdownMenu className="sm:w-60" name="Bank" content={banks} onSelect={handleBankChange} />
+              <DropdownMenu className="" name="Network" content={networks} onSelect={handleNetworkChange} />
             </div>
             <div className="space-y-5">
               <p>Selected Country: {selectedCountry} </p>
@@ -194,13 +194,13 @@ export default function Utilities() {
               <p>Selected Network: {selectedNetwork} </p>
             </div>
           </div>
-          <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[100px]  flex sm:flex-row fle justify-center items-center p-5">
+          <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[50px]  flex sm:flex-row fle justify-center items-center p-5">
             <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event)=>handleNewNumbersRequest(event)}>Generate</button>
           </form>
         
-          <div className="flex items-center justify-center">
+          <div className="sm:flex sm:items-center sm:flex-col sm:justify-center">
           { visibleCard &&(
-            <div className="flex-col p-5 space-y-5 max-h-[450px] w-[500px] overflow-y-auto">
+            <div className="flex-col p-5 space-y-5 mb-10 max-h-[450px] w-[500px] overflow-y-auto">
               <p className="text-center">Generated Cards: {cardData.length}</p>
               {cardData.map((data,index) =>(
                 <Card key={index} cardData={data}/>

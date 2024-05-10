@@ -18,11 +18,16 @@ export default function Card({cardData, isJson}){
 
     return(
         <>
-            <div className="flex flex-col w-[110mm] h-[60mm] bg-slate-400 rounded-lg">
+            <div className="flex flex-col sm:w-[110mm] w-[88mm] h-[55mm] sm:h-[60mm] bg-slate-400 rounded-lg">
                 <div className="pt-10 text-center">
                     <p>{bank}</p>
                 </div>
-                <div className="text-center mt-auto">
+                <div className="flex justify-center mt-5">
+                    { 
+                        network
+                    }
+                </div>
+                <div className="text-center mt-auto bg-slate-100 text-slate-950">
                     <p> {first} - {second} - {third} - {last} </p>
                 </div>
                 <div className="flex justify-center">
@@ -30,7 +35,7 @@ export default function Card({cardData, isJson}){
                         <p>{country}</p>
                     </div>
                 <div className="p-5 flex justify-end">
-                    <p>{level} {network} {type}</p>
+                    <p>{level} {type}</p>
                 </div>
                 </div>
 
