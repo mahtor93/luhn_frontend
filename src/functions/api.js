@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL_BACK = "http://localhost:3333/"
+const API_URL_BACK = "https://luhn-backend.onrender.com"
 
 const apiGet = async (endpoint="") =>{
     try{
