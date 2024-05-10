@@ -1,5 +1,9 @@
 'use client'
 import { useState } from "react"
+import { RiVisaFill } from "react-icons/ri";
+import { FaCcMastercard } from "react-icons/fa6";
+import { SiAmericanexpress } from "react-icons/si";
+
 
 export default function Card({cardData, isJson}){
     const [cardNumber,setCardNumber] = useState(cardData.cardNumber || "")
@@ -19,23 +23,24 @@ export default function Card({cardData, isJson}){
     return(
         <>
             <div className="flex flex-col sm:w-[110mm] w-[88mm] h-[55mm] sm:h-[60mm] bg-slate-400 rounded-lg">
-                <div className="pt-10 text-center">
+                <div className="sm:pt-10 pt-5 text-between ml-6">
                     <p>{bank}</p>
                 </div>
-                <div className="flex justify-center mt-5">
-                    { 
-                        network
-                    }
+                <div className="flex justify-end mr-5 text-4xl">
+                    { network === "VISA" && <RiVisaFill/> }
+                    { network === "MASTERCARD" && <FaCcMastercard /> }
+                    { network === "AMERICAN EXPRESS" && <SiAmericanexpress /> }
+
                 </div>
-                <div className="text-center mt-auto bg-slate-100 text-slate-950">
+                <div className="text-center sm:mt-auto mt-3 bg-slate-100 text-slate-950">
                     <p> {first} - {second} - {third} - {last} </p>
                 </div>
                 <div className="flex justify-center">
-                <div className="p-5 text-center">
+                <div className="sm:p-5 p-3 ml-3 text-center">
                         <p>{country}</p>
                     </div>
-                <div className="p-5 flex justify-end">
-                    <p>{level} {type}</p>
+                <div className="sm:p-5 pt-3 ml-5 flex justify-end">
+                    <p className="">{level} {type}</p>
                 </div>
                 </div>
 

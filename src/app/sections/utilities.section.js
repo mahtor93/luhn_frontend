@@ -67,6 +67,11 @@ export default function Utilities() {
     })
   }
 
+  const handleBinSearch = (e) => {
+    e.preventDefault()
+
+  }
+
   const fetchData = () => {
     apiGet("getcountries")
       .then(data => {
@@ -75,11 +80,13 @@ export default function Utilities() {
       .catch(error => {
         console.error("Webpage Error:", error)
       })
-
   }
 
   const handleNewNumbersRequest = (event) => {
     event.preventDefault();
+    if(cardData){
+      setCardData([])
+    }
     if(selectedCountry&&selectedBank&&selectedNetwork){
       const cardReq  = {
         "country":selectedCountry,
@@ -171,7 +178,7 @@ export default function Utilities() {
           <form className="max-w-2xl mx-auto sm:px-6  pb-[100px]  flex sm:flex-row flex-col justify-center items-center p-5">
             <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
             <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a BIN number" required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg">Get Data</button>
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e)=>handleBinSearch}>Get Data</button>
           </form>
           <div className="flex items-center pb-5 justify-center">
             <hr className="sm:w-[1200px] w-[200px]" />
@@ -198,7 +205,7 @@ export default function Utilities() {
             <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event)=>handleNewNumbersRequest(event)}>Generate</button>
           </form>
         
-          <div className="sm:flex sm:items-center sm:flex-col sm:justify-center">
+          <div className="sm:flex sm:items-center sm:flex-col sm:justify-center sm:align-middle">
           { visibleCard &&(
             <div className="flex-col p-5 space-y-5 mb-10 max-h-[450px] w-[500px] overflow-y-auto">
               <p className="text-center">Generated Cards: {cardData.length}</p>
