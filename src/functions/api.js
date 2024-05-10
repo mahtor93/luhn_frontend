@@ -31,5 +31,4 @@ const apiGetJson = async (endpoint="", data) => {
     }
 }
 
-
 export { apiGet,apiGetJson }
