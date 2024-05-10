@@ -1,5 +1,6 @@
 'use client'
 import DropdownMenu from "@/components/dropdownMenu";
+import Card from "@/components/card";
 import { apiGet,apiGetJson } from "@/functions/api";
 import { useEffect, useState } from "react";
 
@@ -11,6 +12,10 @@ export default function Utilities() {
   const [selectedBank, setSelectedBank] = useState(null)
   const [networks, setNetworks] = useState([])
   const [selectedNetwork, setSelectedNetwork] = useState([])
+  const [visibleCard,setVisibleCard] = useState(false)
+  const [cardData, setCardData] = useState([])
+  const [showCardInfo, setShowCardInfo]= useState(false)
+  const [cardInfo, setCardInfo]= useState(null)
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country)
@@ -24,7 +29,6 @@ export default function Utilities() {
       })
       .finally(() => console.log(banks))
   }
-
   
   const handleBankChange = (bank) => {
     setSelectedBank(bank)
@@ -42,22 +46,25 @@ export default function Utilities() {
   }
 
   const handleNetworkChange = (network) => {
-    setSelectedNetwork(network)
+    setSelectedNetwork(network) 
   }
 
   const handleCardNumberChange = (event) => {
-    setCardNumber(event.target.value)
+    const formattedCardNumber = event.target.value.replace(/\s|-/g, "")
+    setCardNumber(formattedCardNumber)
   }
 
-  const handleCardNumberSearch = () =>{
+  const handleCardNumberSearch = (e) =>{
+    e.preventDefault()
+    setShowCardInfo(true)
+    console.log(cardNumber)
     apiGet(`card/${cardNumber}`)
     .then(data => {
-      data?console.log(data):console.log("noData")
+      data?setCardInfo(data):console.log("No Card Data")
     })
     .catch(error => {
       console.error("Webpage Error:", error)
     })
-    .finally(()=> console.log(data))
   }
 
   const fetchData = () => {
@@ -71,12 +78,33 @@ export default function Utilities() {
 
   }
 
+  const handleNewNumbersRequest = (event) => {
+    event.preventDefault();
+    if(selectedCountry&&selectedBank&&selectedNetwork){
+      const cardReq  = {
+        "country":selectedCountry,
+        "bank":selectedBank,
+        "network":selectedNetwork
+      }
+      apiGetJson('generate/',cardReq)
+      .then(data => {
+        data?setCardData(data.data):console.log("No Data for Create Cards")
+      })
+      .catch(error => {
+        console.error("Create Card Error:",error)
+      }).finally(()=>{setVisibleCard(true)})
+      console.log(cardData)
+    }else{
+      console.error("No data defined to request new card")
+    }
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
 
   return (
-    <div>
+    <>
       {/* Sección 2 */}
       <section id="utilities">
 
@@ -95,13 +123,37 @@ export default function Utilities() {
             <p className="text-lg text-bold md:text-xl text-justify">
               This tool does not store the entered numbers.
             </p>
-          </div>
-          <form className="max-w-2xl mx-auto sm:px-6 pb-[100px] flex sm:flex-row flex-col justify-center items-center p-5">
+          
+          <form className="max-w-2xl mx-auto sm:px-6  flex sm:flex-row flex-col justify-center items-center p-5">
             <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
             <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a card number"onChange={handleCardNumberChange} required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={handleCardNumberSearch}>Get Data</button>
-
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e)=>handleCardNumberSearch(e)}>Get Data</button>
+            
           </form>
+          {
+              showCardInfo &&(
+                <div className="flex justify-center items-between pb-[50px]">
+                  {
+                    cardInfo?(
+                      <div>
+                        <p>BIN: {cardInfo.bin}</p>
+                        <p>Country: {cardInfo.country}</p>
+                        <p>Bank: {cardInfo.bank}</p>
+                        <p>Network: {cardInfo.network}</p>
+                        <p>Type: {cardInfo.type}</p>
+                        <p>Level: {cardInfo.level?cardInfo.level:"No Data"}</p>
+                      </div>
+                    ) : (
+                      <>
+                      <p>No Data Found</p>
+                      </>
+                    )
+                  }
+
+                </div>
+              )
+            }
+            </div>
           <div className="flex items-center pb-5 justify-center">
             <hr className="sm:w-[1200px] w-[200px]" />
           </div>
@@ -143,15 +195,26 @@ export default function Utilities() {
             </div>
           </div>
           <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[100px]  flex sm:flex-row fle justify-center items-center p-5">
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg">Generate</button>
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event)=>handleNewNumbersRequest(event)}>Generate</button>
           </form>
-          <div className="flex items-center pb-5 justify-center">
+        
+          <div className="flex items-center justify-center">
+          { visibleCard &&(
+            <div className="flex-col p-5 space-y-5 max-h-[450px] w-[500px] overflow-y-auto">
+              <p className="text-center">Generated Cards: {cardData.length}</p>
+              {cardData.map((data,index) =>(
+                <Card key={index} cardData={data}/>
+              ))}
+            </div>
+            )}
+            </div>
+          <div className="flex items-center pb-5 justify-center ">
             <hr className="sm:w-[1200px] w-[200px]" />
           </div>
 
 
         </div>
       </section>
-    </div>
+    </>
   );
 }
