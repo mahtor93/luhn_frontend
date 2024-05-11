@@ -193,7 +193,7 @@ export default function Utilities() {
             <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
               <DropdownMenu className="sm:w-60" name="Country" content={countries} onSelect={handleCountryChange} />
               <DropdownMenu className="sm:w-60" name="Bank" content={banks} onSelect={handleBankChange} />
-              <DropdownMenu className="" name="Network" content={networks} onSelect={handleNetworkChange} />
+              <DropdownMenu className="" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
             </div>
             <div className="space-y-5">
               <p>Selected Country: {selectedCountry} </p>
