@@ -3,7 +3,7 @@ import DropdownMenu from "@/components/dropdownMenu";
 import Card from "@/components/card";
 import { apiGet,apiGetJson } from "@/functions/api";
 import { useEffect, useState } from "react";
-
+import { FaSpinner } from "react-icons/fa6";
 export default function Utilities() {
   const [cardNumber, setCardNumber] = useState("")
   const [countries, setCountries] = useState(["No Countries"])
@@ -152,7 +152,7 @@ export default function Utilities() {
                       </div>
                     ) : (
                       <>
-                      <p>No Data Found</p>
+                        <FaSpinner className="w-40 h-40  animate-spin"/>
                       </>
                     )
                   }
