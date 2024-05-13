@@ -35,9 +35,7 @@ export default function Utilities() {
 
   const handleBankChange = (bank) => {
     setSelectedBank(bank)
-    console.log(bank)
     const bank_query = bank.replace(/ /g, "_")
-    console.log(bank_query)
     apiGet(`getnetworks/${bank_query}`)
       .then(data => {
         data ? setNetworks(data) : setNetworks(["No networks"])
@@ -60,7 +58,6 @@ export default function Utilities() {
   const handleCardNumberSearch = (e) => {
     e.preventDefault()
     setShowCardInfo(true)
-    console.log(cardNumber)
     apiGet(`card/${cardNumber}`)
       .then(data => {
         data ? setCardInfo(data) : console.log("No Card Data")
@@ -114,7 +111,6 @@ export default function Utilities() {
         .catch(error => {
           console.error("Create Card Error:", error)
         }).finally(() => { setVisibleCard(true) })
-      console.log(cardData)
     } else {
       console.error("No data defined to request new card")
     }
@@ -229,9 +225,9 @@ export default function Utilities() {
               countries ? (
                 <>
                   <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
-                    <DropdownMenu className="sm:w-60" name="Country" content={countries} isShort={true} onSelect={handleCountryChange} />
-                    <DropdownMenu className="sm:w-60" name="Bank" content={banks} isShort={true} onSelect={handleBankChange} />
-                    <DropdownMenu className="" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
+                    <DropdownMenu className="sm:w-60" name="Country" content={countries} isShort={false} onSelect={handleCountryChange} />
+                    <DropdownMenu className="sm:w-60" name="Bank" content={banks} isShort={false} onSelect={handleBankChange} />
+                    <DropdownMenu className="sm:w-60" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
                   </div>
                   <div className="space-y-5">
                     <p>Selected Country: {selectedCountry} </p>

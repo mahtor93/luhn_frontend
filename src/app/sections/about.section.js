@@ -1,12 +1,12 @@
 export default function About() {
   return (
     <div>
-      <section className="relative p-[16px] " id="about">
+      <section className="relative pt-[150px] sm:pt-1 " id="about">
         {/* Imagen de fondo */}
         <div className="absolute inset-0 bg-cover bg-no-repeat bg-fixed" style={{ backgroundImage: "url('/images/background_home.jpg')" }}></div>
         <div className="absolute inset-0  backdrop-blur-sm bg-black  opacity-80 z-1"></div>
         <div className="relative z-10 flex flex-col items-start  justify-center h-screen text-slate-200">
-          <h1 className="text-3xl sm:text-4x1 pt-[400px] sm:pt-1 md:text-6xl sm:px-6 mx-auto font-bold mb-4">About this project</h1>
+          <h1 className="text-3xl sm:text-4x1   md:text-6xl sm:px-6 mx-auto font-bold mb-4">About this project</h1>
           <div className="max-w-7xl mx-auto sm:px-6 justify-between p-5">
             <h2 className="text-3xl pb-5">This project consists of two core components: </h2>
             <div className="text-lg  md:text-xl text-justify pb-5">

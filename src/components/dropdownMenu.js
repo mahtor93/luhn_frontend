@@ -48,8 +48,8 @@ const DropdownMenu = ({ name, content, onSelect, isShort }) => {
 
       {/* Dropdown panel */}
       {isOpen && (
-        <div className={isMobile ? "fixed inset-0 flex items-center justify-center bg-gray-800 backdrop-blur-sm bg-opacity-50 z-50" : "dropdown-menu origin-top-left absolute left-0 z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-auto"}>
-          <div className={isMobile ?`md:max-w-md mx-4 ${isShort?'h-auto':'h-[350px]'} m-10 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 overflow-auto` : `py-1 ${isShort?'h-auto':'h-[350px]'}`}>
+        <div className={isMobile ? "fixed inset-0 flex items-center justify-center bg-gray-800 backdrop-blur-sm bg-opacity-50 z-50 " : "dropdown-menu origin-top-left absolute left-0 z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"}>
+          <div className={isMobile ?`md:max-w-md mx-4 ${isShort?'h-auto w-[100%] text-center':'h-[400px]'} overflow-auto m-10 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 ` : `py-1 ${isShort?'h-auto':'h-[350px]'}`}>
             {content.map((element, index) => (
               <a
                 key={index}
