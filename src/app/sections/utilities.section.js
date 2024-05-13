@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa6";
 export default function Utilities() {
   const [cardNumber, setCardNumber] = useState("")
+  const [binNumber, setBinNumber] = useState("")
   const [countries, setCountries] = useState([])
   const [selectedCountry, setSelectedCountry] = useState(null)
   const [banks, setBanks] = useState(["Select a Country"])
@@ -15,7 +16,9 @@ export default function Utilities() {
   const [visibleCard, setVisibleCard] = useState(false)
   const [cardData, setCardData] = useState([])
   const [showCardInfo, setShowCardInfo] = useState(false)
+  const [showBinInfo, setShowBinInfo] = useState(false)
   const [cardInfo, setCardInfo] = useState(null)
+  const [binInfo, setBinInfo] = useState(null)
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country)
@@ -66,10 +69,21 @@ export default function Utilities() {
         console.error("Webpage Error:", error)
       })
   }
+  const handleBinNumberChange = (e) => {
+    setBinNumber(e.target.value)
+  }
 
   const handleBinSearch = (e) => {
     e.preventDefault()
-
+    setShowBinInfo(true)
+    apiGet(`card/bin/${binNumber}`)
+      .then(data => {
+        data ? setBinInfo(data) : console.log(' No Bin Data ')
+      })
+      .catch(error => {
+        console.error("Bin catch data error: ", error)
+      })
+      .finally((e) => { console.log(binInfo) })
   }
 
   const fetchData = () => {
@@ -174,12 +188,34 @@ export default function Utilities() {
             <p className="text-lg text-bold md:text-xl text-justify">
 
             </p>
-          </div>
-          <form className="max-w-2xl mx-auto sm:px-6  pb-[100px]  flex sm:flex-row flex-col justify-center items-center p-5">
+          
+          <form className="max-w-2xl mx-auto sm:px-6  pb-[25px]  flex sm:flex-row flex-col justify-center items-center p-5">
             <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
-            <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a BIN number" required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleBinSearch}>Get Data</button>
+            <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a BIN number" onChange={handleBinNumberChange} required />
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleBinSearch(e)}>Get Data</button>
           </form>
+          {
+            showBinInfo && (
+              <div className="flex justify-center items-between pb-[50px]">
+                {
+                  binInfo ? (
+                    <div>
+                      <p>Country: {binInfo.country}</p>
+                      <p>Bank: {binInfo.bank}</p>
+                      <p>Network: {binInfo.network}</p>
+                      <p>Type: {binInfo.type}</p>
+                      <p>Level: {binInfo.level ? binInfo.level : "No Data"}</p>
+                    </div>
+                  ) : (
+                    <>
+                      <FaSpinner className="w-40 h-40  animate-spin" />
+                    </>
+                  )
+                }
+              </div>
+            )
+          }
+          </div>
           <div className="flex items-center pb-5 justify-center">
             <hr className="sm:w-[1200px] w-[200px]" />
           </div>
