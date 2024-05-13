@@ -1,21 +1,21 @@
 'use client'
 import DropdownMenu from "@/components/dropdownMenu";
 import Card from "@/components/card";
-import { apiGet,apiGetJson } from "@/functions/api";
+import { apiGet, apiGetJson } from "@/functions/api";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa6";
 export default function Utilities() {
   const [cardNumber, setCardNumber] = useState("")
-  const [countries, setCountries] = useState(["No Countries"])
+  const [countries, setCountries] = useState([])
   const [selectedCountry, setSelectedCountry] = useState(null)
-  const [banks, setBanks] = useState(["No Banks"])
+  const [banks, setBanks] = useState(["Select a Country"])
   const [selectedBank, setSelectedBank] = useState(null)
-  const [networks, setNetworks] = useState(["No Networks"])
+  const [networks, setNetworks] = useState(["Select a Bank"])
   const [selectedNetwork, setSelectedNetwork] = useState([])
-  const [visibleCard,setVisibleCard] = useState(false)
+  const [visibleCard, setVisibleCard] = useState(false)
   const [cardData, setCardData] = useState([])
-  const [showCardInfo, setShowCardInfo]= useState(false)
-  const [cardInfo, setCardInfo]= useState(null)
+  const [showCardInfo, setShowCardInfo] = useState(false)
+  const [cardInfo, setCardInfo] = useState(null)
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country)
@@ -29,7 +29,7 @@ export default function Utilities() {
       })
       .finally(() => console.log(banks))
   }
-  
+
   const handleBankChange = (bank) => {
     setSelectedBank(bank)
     console.log(bank)
@@ -46,7 +46,7 @@ export default function Utilities() {
   }
 
   const handleNetworkChange = (network) => {
-    setSelectedNetwork(network) 
+    setSelectedNetwork(network)
   }
 
   const handleCardNumberChange = (event) => {
@@ -54,17 +54,17 @@ export default function Utilities() {
     setCardNumber(formattedCardNumber)
   }
 
-  const handleCardNumberSearch = (e) =>{
+  const handleCardNumberSearch = (e) => {
     e.preventDefault()
     setShowCardInfo(true)
     console.log(cardNumber)
     apiGet(`card/${cardNumber}`)
-    .then(data => {
-      data?setCardInfo(data):console.log("No Card Data")
-    })
-    .catch(error => {
-      console.error("Webpage Error:", error)
-    })
+      .then(data => {
+        data ? setCardInfo(data) : console.log("No Card Data")
+      })
+      .catch(error => {
+        console.error("Webpage Error:", error)
+      })
   }
 
   const handleBinSearch = (e) => {
@@ -75,7 +75,7 @@ export default function Utilities() {
   const fetchData = () => {
     apiGet("getcountries")
       .then(data => {
-        data ? setCountries(data) : setCountries(["no countries"])
+        data ? setCountries(data) : setCountries([])
       })
       .catch(error => {
         console.error("Webpage Error:", error)
@@ -84,24 +84,24 @@ export default function Utilities() {
 
   const handleNewNumbersRequest = (event) => {
     event.preventDefault();
-    if(cardData){
+    if (cardData) {
       setCardData([])
     }
-    if(selectedCountry&&selectedBank&&selectedNetwork){
-      const cardReq  = {
-        "country":selectedCountry,
-        "bank":selectedBank,
-        "network":selectedNetwork
+    if (selectedCountry && selectedBank && selectedNetwork) {
+      const cardReq = {
+        "country": selectedCountry,
+        "bank": selectedBank,
+        "network": selectedNetwork
       }
-      apiGetJson('generate/',cardReq)
-      .then(data => {
-        data?setCardData(data.data):console.log("No Data for Create Cards")
-      })
-      .catch(error => {
-        console.error("Create Card Error:",error)
-      }).finally(()=>{setVisibleCard(true)})
+      apiGetJson('generate/', cardReq)
+        .then(data => {
+          data ? setCardData(data.data) : console.log("No Data for Create Cards")
+        })
+        .catch(error => {
+          console.error("Create Card Error:", error)
+        }).finally(() => { setVisibleCard(true) })
       console.log(cardData)
-    }else{
+    } else {
       console.error("No data defined to request new card")
     }
   }
@@ -130,29 +130,29 @@ export default function Utilities() {
             <p className="text-lg text-bold md:text-xl text-justify">
               This tool does not store the entered numbers.
             </p>
-          
-          <form className="max-w-2xl mx-auto sm:px-6  flex sm:flex-row flex-col justify-center items-center p-5">
-            <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
-            <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a card number"onChange={handleCardNumberChange} required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e)=>handleCardNumberSearch(e)}>Get Data</button>
-            
-          </form>
-          {
-              showCardInfo &&(
+
+            <form className="max-w-2xl mx-auto sm:px-6  flex sm:flex-row flex-col justify-center items-center p-5">
+              <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
+              <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a card number" onChange={handleCardNumberChange} required />
+              <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleCardNumberSearch(e)}>Get Data</button>
+
+            </form>
+            {
+              showCardInfo && (
                 <div className="flex justify-center items-between pb-[50px]">
                   {
-                    cardInfo?(
+                    cardInfo ? (
                       <div>
                         <p>BIN: {cardInfo.bin}</p>
                         <p>Country: {cardInfo.country}</p>
                         <p>Bank: {cardInfo.bank}</p>
                         <p>Network: {cardInfo.network}</p>
                         <p>Type: {cardInfo.type}</p>
-                        <p>Level: {cardInfo.level?cardInfo.level:"No Data"}</p>
+                        <p>Level: {cardInfo.level ? cardInfo.level : "No Data"}</p>
                       </div>
                     ) : (
                       <>
-                        <FaSpinner className="w-40 h-40  animate-spin"/>
+                        <FaSpinner className="w-40 h-40  animate-spin" />
                       </>
                     )
                   }
@@ -160,7 +160,7 @@ export default function Utilities() {
                 </div>
               )
             }
-            </div>
+          </div>
           <div className="flex items-center pb-5 justify-center">
             <hr className="sm:w-[1200px] w-[200px]" />
           </div>
@@ -178,7 +178,7 @@ export default function Utilities() {
           <form className="max-w-2xl mx-auto sm:px-6  pb-[100px]  flex sm:flex-row flex-col justify-center items-center p-5">
             <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
             <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a BIN number" required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e)=>handleBinSearch}>Get Data</button>
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleBinSearch}>Get Data</button>
           </form>
           <div className="flex items-center pb-5 justify-center">
             <hr className="sm:w-[1200px] w-[200px]" />
@@ -189,32 +189,44 @@ export default function Utilities() {
             <p className="text-lg  md:text-xl text-justify">
               This tool will generate a required quantity of credit card numbers for a selected combination
             </p>
+            {
+              countries ? (
+                <>
+                  <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
+                    <DropdownMenu className="sm:w-60" name="Country" content={countries} isShort={true} onSelect={handleCountryChange} />
+                    <DropdownMenu className="sm:w-60" name="Bank" content={banks} isShort={true} onSelect={handleBankChange} />
+                    <DropdownMenu className="" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
+                  </div>
+                  <div className="space-y-5">
+                    <p>Selected Country: {selectedCountry} </p>
+                    <p>Selected Bank: {selectedBank} </p>
+                    <p>Selected Network: {selectedNetwork} </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col justify-center items-center">
+                    <FaSpinner className="w-40 h-40  animate-spin" />
+                  </div>
+                </>
+              )
+            }
 
-            <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
-              <DropdownMenu className="sm:w-60" name="Country" content={countries} onSelect={handleCountryChange} />
-              <DropdownMenu className="sm:w-60" name="Bank" content={banks} onSelect={handleBankChange} />
-              <DropdownMenu className="" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
-            </div>
-            <div className="space-y-5">
-              <p>Selected Country: {selectedCountry} </p>
-              <p>Selected Bank: {selectedBank} </p>
-              <p>Selected Network: {selectedNetwork} </p>
-            </div>
           </div>
           <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[50px]  flex sm:flex-row fle justify-center items-center p-5">
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event)=>handleNewNumbersRequest(event)}>Generate</button>
+            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event) => handleNewNumbersRequest(event)}>Generate</button>
           </form>
-        
+
           <div className="sm:flex sm:items-center sm:flex-col sm:justify-center sm:align-middle">
-          { visibleCard &&(
-            <div className="flex-col p-5 space-y-5 mb-10 max-h-[450px] w-[500px] overflow-y-auto">
-              <p className="text-center">Generated Cards: {cardData.length}</p>
-              {cardData.map((data,index) =>(
-                <Card key={index} cardData={data}/>
-              ))}
-            </div>
+            {visibleCard && (
+              <div className="flex-col p-5 space-y-5 mb-10 max-h-[450px] w-[500px] overflow-y-auto">
+                <p className="text-center">Generated Cards: {cardData.length}</p>
+                {cardData.map((data, index) => (
+                  <Card key={index} cardData={data} />
+                ))}
+              </div>
             )}
-            </div>
+          </div>
           <div className="flex items-center pb-5 justify-center ">
             <hr className="sm:w-[1200px] w-[200px]" />
           </div>
