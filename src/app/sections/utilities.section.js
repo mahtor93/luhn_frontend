@@ -254,9 +254,11 @@ export default function Utilities() {
             {visibleCard && (
               <div className="flex-col p-5 space-y-5 mb-10 max-h-[450px] w-[500px] overflow-y-auto">
                 <p className="text-center">Generated Cards: {cardData.length}</p>
+                <div className="space-y-5 flex flex-col">
                 {cardData.map((data, index) => (
                   <Card key={index} cardData={data} />
                 ))}
+                </div>
               </div>
             )}
           </div>
