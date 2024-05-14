@@ -6,7 +6,7 @@ export default function ContactCard({ closeModal }) {
         <>
             <div className="bg-slate-100 sm:h-[440px] rounded-lg sm:w-[512px]">
                 <h2 className="m-3 text-2xl text-slate-950" >
-                    Let's Talk!
+                    Lets Talk!
                 </h2>
                 <form className="flex flex-col">
                     <input type="text" id="email" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="Insert your Email" />
