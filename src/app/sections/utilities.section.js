@@ -90,7 +90,7 @@ export default function Utilities() {
       })
       .catch(error => {
         console.error("Webpage Error:", error)
-      })
+      }).finally((e)=> {console.log(countries)})
   }
 
   const handleNewNumbersRequest = (event) => {
@@ -225,6 +225,7 @@ export default function Utilities() {
               countries ? (
                 <>
                   <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
+                    
                     <DropdownMenu className="sm:w-60" name="Country" content={countries} isShort={false} onSelect={handleCountryChange} />
                     <DropdownMenu className="sm:w-60" name="Bank" content={banks} isShort={false} onSelect={handleBankChange} />
                     <DropdownMenu className="sm:w-60" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
