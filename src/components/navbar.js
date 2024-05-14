@@ -8,7 +8,7 @@ import ContactCard from './contact';
 const Navbar = () => {
   const [openCloseMenu, setOpenCloseMenu] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleScroll = () => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop

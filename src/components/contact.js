@@ -5,7 +5,7 @@ export default function ContactCard({ closeModal }) {
     return (
         <>
             <div className="bg-slate-100 sm:h-[440px] rounded-lg sm:w-[512px]">
-                <h2 className="m-3 text-2xl text-slate-950">
+                <h2 className="m-3 text-2xl text-slate-950" >
                     Let's Talk!
                 </h2>
                 <form className="flex flex-col">
