@@ -90,7 +90,7 @@ export default function Utilities() {
       })
       .catch(error => {
         console.error("Webpage Error:", error)
-      }).finally((e)=> {console.log(countries)})
+      })
   }
 
   const handleNewNumbersRequest = (event) => {
