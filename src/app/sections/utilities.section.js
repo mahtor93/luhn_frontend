@@ -19,6 +19,7 @@ export default function Utilities() {
   const [showBinInfo, setShowBinInfo] = useState(false)
   const [cardInfo, setCardInfo] = useState(null)
   const [binInfo, setBinInfo] = useState(null)
+  const [dataLoaded, setDataLoaded] = useState(false)
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country)
@@ -90,7 +91,7 @@ export default function Utilities() {
       })
       .catch(error => {
         console.error("Webpage Error:", error)
-      })
+      }).finally((e) => { setDataLoaded(true) })
   }
 
   const handleNewNumbersRequest = (event) => {
@@ -144,8 +145,18 @@ export default function Utilities() {
             <form className="max-w-2xl mx-auto sm:px-6  flex sm:flex-row flex-col justify-center items-center p-5">
               <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
               <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a card number" onChange={handleCardNumberChange} required />
-              <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleCardNumberSearch(e)}>Get Data</button>
-
+              
+              {
+                dataLoaded ? (
+                  <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleCardNumberSearch(e)}>Get Data</button>
+                ) : (
+                  <>
+                    <div className="flex flex-col justify-center items-center">
+                      <FaSpinner className="w-20 h-20  animate-spin" />
+                    </div>
+                  </>
+                )
+              }
             </form>
             {
               showCardInfo && (
@@ -181,17 +192,23 @@ export default function Utilities() {
             <p className="text-lg  md:text-xl text-justify">
               This tool will provide you with information about the origin of a BIN number.
             </p>
-            <p className="text-lg text-bold md:text-xl text-justify">
+            <form className="max-w-2xl mx-auto sm:px-6  pb-[25px]  flex sm:flex-row flex-col justify-center items-center p-5">
+              <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
+              <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a BIN number" onChange={handleBinNumberChange} required />
+              {
+                dataLoaded ? (
+                  <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleBinSearch(e)}>Get Data</button>
+                ) : (
+                  <>
+                    <div className="flex flex-col justify-center items-center">
+                      <FaSpinner className="w-20 h-20  animate-spin" />
+                    </div>
+                  </>
+                )
+              }
+            </form>
 
-            </p>
-          
-          <form className="max-w-2xl mx-auto sm:px-6  pb-[25px]  flex sm:flex-row flex-col justify-center items-center p-5">
-            <label htmlFor="number" className="block text-slate-200  font-semibold"></label>
-            <input type="text" id="number" name="number" className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:ring text-slate-950 focus:border-blue-300 m-3 shadow-lg" placeholder="insert a BIN number" onChange={handleBinNumberChange} required />
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 m-3 shadow-lg" onClick={(e) => handleBinSearch(e)}>Get Data</button>
-          </form>
-          {
-            showBinInfo && (
+            {showBinInfo && (
               <div className="flex justify-center items-between pb-[50px]">
                 {
                   binInfo ? (
@@ -210,7 +227,7 @@ export default function Utilities() {
                 }
               </div>
             )
-          }
+            }
           </div>
           <div className="flex items-center pb-5 justify-center">
             <hr className="sm:w-[1200px] w-[200px]" />
@@ -222,42 +239,41 @@ export default function Utilities() {
               This tool will generate a required quantity of credit card numbers for a selected combination
             </p>
             {
-              countries ? (
+              dataLoaded ? (
                 <>
                   <div className="sm:space-x-5 sm:justify-center py-5 sm:items-center sm:flex sm:flex-row grid space-y-5 sm:space-y-0">
-                    
+
                     <DropdownMenu className="sm:w-60" name="Country" content={countries} isShort={false} onSelect={handleCountryChange} />
                     <DropdownMenu className="sm:w-60" name="Bank" content={banks} isShort={false} onSelect={handleBankChange} />
                     <DropdownMenu className="sm:w-60" name="Network" content={networks} isShort={true} onSelect={handleNetworkChange} />
                   </div>
-                  <div className="space-y-5">
-                    <p>Selected Country: {selectedCountry} </p>
-                    <p>Selected Bank: {selectedBank} </p>
-                    <p>Selected Network: {selectedNetwork} </p>
-                  </div>
+
                 </>
               ) : (
                 <>
                   <div className="flex flex-col justify-center items-center">
-                    <FaSpinner className="w-40 h-40  animate-spin" />
+                    <FaSpinner className="w-20 h-20  animate-spin" />
                   </div>
                 </>
               )
             }
 
           </div>
-          <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[50px]  flex sm:flex-row fle justify-center items-center p-5">
-            <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event) => handleNewNumbersRequest(event)}>Generate</button>
-          </form>
+          {dataLoaded ? (
+            <form className="max-w-2xl space-x-5 mx-auto sm:px-6  pb-[50px]  flex sm:flex-row fle justify-center items-center p-5">
+              <button type="submit" className="bg-blue-700 text-slate-200 px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:bg-purple-700 shadow-lg" onClick={(event) => handleNewNumbersRequest(event)}>Generate</button>
+            </form>) : (<>
+            </>)}
+
 
           <div className="sm:flex sm:items-center sm:flex-col sm:justify-center sm:align-middle">
             {visibleCard && (
               <div className="flex-col p-5 space-y-5 mb-10 max-h-[450px] w-[500px] overflow-y-auto">
                 <p className="text-center">Generated Cards: {cardData.length}</p>
                 <div className="space-y-5 flex flex-col">
-                {cardData.map((data, index) => (
-                  <Card key={index} cardData={data} />
-                ))}
+                  {cardData.map((data, index) => (
+                    <Card key={index} cardData={data} />
+                  ))}
                 </div>
               </div>
             )}
