@@ -20,6 +20,9 @@ export default function Utilities() {
   const [cardInfo, setCardInfo] = useState(null)
   const [binInfo, setBinInfo] = useState(null)
   const [dataLoaded, setDataLoaded] = useState(false)
+  const [isCountrySelected,setIsCountrySelected] = useState(false)
+
+/* Funciones para la generación de tarjetas */
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country)
@@ -50,6 +53,8 @@ export default function Utilities() {
   const handleNetworkChange = (network) => {
     setSelectedNetwork(network)
   }
+
+
 
   const handleCardNumberChange = (event) => {
     const formattedCardNumber = event.target.value.replace(/\s|-/g, "")
